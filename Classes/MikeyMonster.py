@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # coding: Latin-1
 """ Makes the MonsterBorg remote controllable, using the ThunderBorg library """
-import Classes.ThunderBorg    as ThunderBorg
+import Classes.ThunderBorg3   as ThunderBorg
 import Classes.MikeyFunctions as MikeyFunctions
 
 class JoystickSettings(object):
 	""" The object which contains the settings for the joystick """
-	def __init__(self, left_axis = 1, right_axis = 2, slow_button = 8, slow_factor = 0.5):
+	def __init__(self, left_axis = 1, right_axis = 3, slow_button = 8, slow_factor = 0.5):
 		""" Contains the settings for the joystick """
 		self.left_axis = left_axis
 		self.invert_left_axis = False
@@ -16,22 +16,92 @@ class JoystickSettings(object):
 		self.slow_factor = slow_factor
 		self.interval = 0.00
 
+class PowerSettings(object):
+	""" Contains the power settings """
+	def __init__(self, voltage_in = 12.00, voltage_out = 11.4):
+		""" Contains the settings for the POWAAHH! """
+		self.voltage_in  = float(voltage_in)
+		self.voltage_out = float(voltage_out)
+		# Set up the power limits
+		if self.voltage_out > self.voltage_in:
+			self.max_power = 1.0
+		else:
+			self.max_power = self.voltage_out / self.voltage_in
+
 class MikeyMonster():
 	""" Controls the MonsterBorg """
-	def __init__(self, joystick):
+	def __init__(self, joystick, power):
 		""" Sets up the ThunderBorg, which is used by the MonsterBorg """
 		init_error = "Couldn't initialise the MikeyMonster"
+		self.failsafe = False
 		self.joystick = joystick
+		self.power    = power
 		# Setup the ThunderBorg
 		self.thunderborg = ThunderBorg.ThunderBorg()
 		self.thunderborg.Init()
 		# Check that a ThunderBorg chip can be found
 		self.result = self._find_chips()
-		print(self.result)
 		# If there was an error, return
 		if self.result.success is False:
 			self.result.error_msg = init_error
 			return
+		# Set the motors and LEDs off
+		self.thunderborg.MotorsOff()
+		self.thunderborg.SetLedShowBattery(False)
+		self.thunderborg.SetLeds(0,0,1)
+
+	def drive(self, left, right):
+		""" Moves the MikeyMonster """
+		self.thunderborg.SetMotor1(right * self.power.max_power)
+		self.thunderborg.SetMotor2(left  * self.power.max_power)
+
+	def set_leds(self, led1, led2, led3):
+		""" Sets the LEDs """
+		self.thunderborg.SetLeds(led1, led2, led3)
+
+	def get_battery_details(self):
+		""" Returns the state of the battery """
+		battery = {}
+		battery["minimum"], battery["maximum"] = self.thunderborg.GetBatteryMonitoringLimits()
+		battery["current"] = self.thunderborg.GetBatteryReading()
+		return battery
+
+	def enable_failsafe(self):
+		""" Enables the failsafe """
+		failsafe = False
+		# Makes five attempts at enabling the failsafe
+		for index in range(5):
+			# This is just to stop Pylint complaining about an unused variable
+			index = index
+			# Set the failsafe
+			self.thunderborg.SetCommsFailsafe(True)
+			failsafe = self.thunderborg.GetCommsFailsafe()
+		# Set the class's failsafe to match the function failsafe
+		self.failsafe = failsafe
+
+	def disable_failsafe(self):
+		""" Enables the failsafe """
+		failsafe = False
+		# Makes five attempts at disabling the failsafe
+		for index in range(5):
+			# This is just to stop Pylint complaining about an unused variable
+			index = index
+			# Set the failsafe
+			self.thunderborg.SetCommsFailsafe(False)
+			failsafe = self.thunderborg.GetCommsFailsafe()
+		# Set the class's failsafe to match the function failsafe
+		self.failsafe = failsafe
+
+	def led_show_battery(self, show = True):
+		""" Changes whether the LEDs show the battery status or not """
+		self.thunderborg.SetLedShowBattery(show)
+
+	def turn_off(self):
+		""" Switches off """
+		self.thunderborg.MotorsOff()
+		self.disable_failsafe()
+		self.led_show_battery(False)
+		self.set_leds(0, 0, 0)
 
 	def _find_chips(self):
 		""" Scans for ThunderBorgs """
