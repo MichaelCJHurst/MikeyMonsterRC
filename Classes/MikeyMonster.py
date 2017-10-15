@@ -6,15 +6,17 @@ import Classes.MikeyFunctions as MikeyFunctions
 
 class JoystickSettings(object):
 	""" The object which contains the settings for the joystick """
-	def __init__(self, left_axis = 1, right_axis = 3, slow_button = 8, slow_factor = 0.5):
+	def __init__(self, joystick_mode = 1, left_axis = 1, right_axis = 2, slow_button = 8, fast_button = 9):
 		""" Contains the settings for the joystick """
-		self.left_axis = left_axis
-		self.invert_left_axis = False
-		self.right_axis = right_axis
+		self.joystick_mode     = joystick_mode
+		self.left_axis         = left_axis
+		self.invert_left_axis  = False
+		self.right_axis        = right_axis
 		self.invert_right_axis = False
-		self.slow_button = slow_button
-		self.slow_factor = slow_factor
-		self.interval = 0.00
+		self.slow_button       = slow_button
+		self.slow_factor       = 0.5
+		self.fast_button       = fast_button
+		self.interval          = 0.00
 
 class PowerSettings(object):
 	""" Contains the power settings """

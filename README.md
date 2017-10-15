@@ -12,4 +12,5 @@ Custom RC code for PiBorg's MonsterBorg
 
 # Notes
 - If the ThunderBorg can't be found, and it's finding board 00 instead, that's an issue with the Raspbian version. Running 'sudo rpi-update 5224108' will un-update it to a version that works. Hopefully they'll fix it soon!
+- Works really well with https://elinux.org/RPi-Cam-Web-Interface
 - To get this to work with a PS3 controller, follow the instructions at https://www.piborg.org/rpi-ps3-help
