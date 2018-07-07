@@ -11,14 +11,12 @@ class JoystickSettingsClass(object):
     """ The object which contains the settings for the joystick """
     def __init__(
             self,
-            joystick_mode = 1,
             left_axis = 1,
-            right_axis = 2,
+            right_axis = 3,
             slow_button = 8,
             fast_button = 9
     ):
         """ Contains the settings for the joystick """
-        self.joystick_mode     = joystick_mode
         self.left_axis         = left_axis
         self.invert_left_axis  = False
         self.right_axis        = right_axis

@@ -25,7 +25,7 @@ class InputHandlerClass():
         self.perform_move()
 
     def turn_left(self):
-        """ Deals with thurning left """
+        """ Deals with turning left """
         # If not moving, move
         if self.vertical > -0.05 and self.vertical < 0.05:
             self.drive_left  = self.horizontal  * self.power_settings.max_power
