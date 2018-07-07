@@ -14,7 +14,8 @@ class JoystickSettingsClass(object):
             left_axis = 1,
             right_axis = 3,
             slow_button = 8,
-            fast_button = 9
+            fast_button = 9,
+            light_button = 1
     ):
         """ Contains the settings for the joystick """
         self.left_axis         = left_axis
@@ -24,9 +25,12 @@ class JoystickSettingsClass(object):
         self.slow_button       = slow_button
         self.slow_factor       = 0.5
         self.fast_button       = fast_button
+        self.light_button      = light_button
+        self.open_grip         = 6
+        self.close_grip        = 7
         self.interval          = 0.00
 
-class PowerSettingsClass(object):
+class PowerSettingsClass(object): # pylint: disable=R0903
     """ Contains the power settings """
     def __init__(self, voltage_in = 12.00, voltage_out = 11.4):
         """ Contains the settings for the POWAAHH! """

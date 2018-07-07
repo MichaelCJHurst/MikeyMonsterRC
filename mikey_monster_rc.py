@@ -54,14 +54,13 @@ def had_event(event):
     """ Check that there has been a valid event """
     running    = True
     temp_event = False
-    # print(event)
     if event.type == pygame.QUIT:
         running = False
     elif event.type == pygame.JOYBUTTONDOWN:
         temp_event = True
     elif event.type == pygame.JOYAXISMOTION:
         temp_event = True
-    return temp_event, running
+    return running, temp_event
 
 def main():
     """ Run when the program starts """
@@ -98,7 +97,7 @@ def main():
                     input_handler.execute_move(joystick)
     except KeyboardInterrupt:
         # CTRL+C exit, so quit gracefully
-        input_handler.mikey_monster.turn_off()
+        input_handler.stop()
 
 def output_battery(battery):
     """ Outputs the status of the battery """

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # coding: Latin-1
 """ Contains the InputHandler functionality """
+from   Classes.mikey_arm     import MikeyArmClass
 from   Classes.mikey_monster import JoystickSettingsClass, MikeyMonsterClass, PowerSettingsClass
 
 class InputHandlerClass():
@@ -10,10 +11,16 @@ class InputHandlerClass():
         self.joystick_settings = JoystickSettingsClass()
         self.power_settings    = PowerSettingsClass()
         self.mikey_monster     = MikeyMonsterClass(self.joystick_settings, self.power_settings)
+        self.mikey_arm         = MikeyArmClass()
         self.drive_left        = 0.0
         self.drive_right       = 0.0
         self.horizontal        = 0
         self.vertical          = 0
+
+    def stop(self):
+        """ Stops everything """
+        self.mikey_arm.stop_arm()
+        self.mikey_monster.turn_off()
 
     def get_battery_details(self):
         """ Returns the battery details """
@@ -56,9 +63,16 @@ class InputHandlerClass():
         elif self.horizontal > 0.05:
             self.turn_right()
         # Check for button presses
+        self.mikey_arm.stop_arm()
         if joystick.get_button(self.joystick_settings.slow_button):
             self.drive_left  *= self.joystick_settings.slow_factor
             self.drive_right *= self.joystick_settings.slow_factor
+        elif joystick.get_button(self.joystick_settings.light_button):
+            self.mikey_arm.toggle_light()
+        elif joystick.get_button(self.joystick_settings.open_grip):
+            self.mikey_arm.open_grip()
+        elif joystick.get_button(self.joystick_settings.close_grip):
+            self.mikey_arm.close_grip()
 
     def get_horizontal_axis(self, joystick):
         """ Sets the self.horizontal axis """
