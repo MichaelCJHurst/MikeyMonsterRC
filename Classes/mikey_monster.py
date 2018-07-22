@@ -15,7 +15,7 @@ class JoystickSettingsClass(object):
             right_axis = 3,
             slow_button = 8,
             fast_button = 9,
-            light_button = 1
+            light_button = 2
     ):
         """ Contains the settings for the joystick """
         self.left_axis         = left_axis
@@ -26,8 +26,17 @@ class JoystickSettingsClass(object):
         self.slow_factor       = 0.5
         self.fast_button       = fast_button
         self.light_button      = light_button
-        self.open_grip         = 6
-        self.close_grip        = 7
+        self.open_grip         = 0
+        self.close_grip        = 1
+        self.base_acw          = 7
+        self.base_cw           = 6
+        self.shoulder_up       = 15
+        self.shoulder_down     = 13
+        self.elbow_up          = 16
+        self.elbow_down        = 14
+        self.wrist_up          = 4
+        self.wrist_down        = 5
+        self.stop_stop_please_stop = 3
         self.interval          = 0.00
 
 class PowerSettingsClass(object): # pylint: disable=R0903

@@ -28,6 +28,7 @@ class MikeyArmClass():
 
         if self.arm is None:
             print("Arm not found")
+            self.arm = False
             return
         self.arm.reset()
         self.toggle_light()
@@ -49,13 +50,47 @@ class MikeyArmClass():
         """ Closes the grip """
         self.send_control([1,0,0])
 
+    def base_acw(self):
+        """ Rotates the base anti-clockwise """
+        self.send_control([0,1,0])
+
+    def base_cw(self):
+        """ Rotates the base clockwise """
+        self.send_control([0,2,0])
+
+    def shoulder_up(self):
+        """ Moves the shoulder up """
+        self.send_control([64,0,0])
+
+    def shoulder_down(self):
+        """ Moves the shoulder down """
+        self.send_control([128,0,0])
+
+    def elbow_up(self):
+        """ Moves the elbow up """
+        self.send_control([16,0,0])
+
+    def elbow_down(self):
+        """ Moves the elbow up """
+        self.send_control([32,0,0])
+
+    def wrist_up(self):
+        """ Moves the elbow up """
+        self.send_control([4,0,0])
+
+    def wrist_down(self):
+        """ Moves the elbow up """
+        self.send_control([8,0,0])
+
     def send_control(self, command):
         """ Moves the arm """
-        try:
-            self.arm.ctrl_transfer(0x40, 6, 0x100, 0, command)
-        except:
-            print("oh noes")
-            self.emergency_stop()
+        #print(command)
+        if self.arm:
+            try:
+                self.arm.ctrl_transfer(0x40, 6, 0x100, 0, command)
+            except usb.core.USBError:
+                print("oh noes")
+                self.emergency_stop()
 
     def stop_arm(self):
         """ Stops the arm from moving """

@@ -78,6 +78,7 @@ def main():
     joystick = connect_joystick(input_handler.mikey_monster)
     joystick.init()
     print("Found a joystick")
+    input_handler.setup_arm()
     # Use the LEDs like normal
     input_handler.mikey_monster.led_show_battery(True)
     # This deals with the inputs
@@ -94,6 +95,7 @@ def main():
             for event in events:
                 running, was_event = had_event(event)
                 if was_event:
+                    #print(event)
                     input_handler.execute_move(joystick)
     except KeyboardInterrupt:
         # CTRL+C exit, so quit gracefully

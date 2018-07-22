@@ -17,6 +17,10 @@ class InputHandlerClass():
         self.horizontal        = 0
         self.vertical          = 0
 
+    def setup_arm(self):
+        """ Sets the arm up """
+        self.mikey_arm = MikeyArmClass()
+
     def stop(self):
         """ Stops everything """
         self.mikey_arm.stop_arm()
@@ -62,17 +66,48 @@ class InputHandlerClass():
         # Turning right
         elif self.horizontal > 0.05:
             self.turn_right()
+        arm_move = False
         # Check for button presses
-        self.mikey_arm.stop_arm()
         if joystick.get_button(self.joystick_settings.slow_button):
             self.drive_left  *= self.joystick_settings.slow_factor
             self.drive_right *= self.joystick_settings.slow_factor
-        elif joystick.get_button(self.joystick_settings.light_button):
-            self.mikey_arm.toggle_light()
-        elif joystick.get_button(self.joystick_settings.open_grip):
-            self.mikey_arm.open_grip()
-        elif joystick.get_button(self.joystick_settings.close_grip):
-            self.mikey_arm.close_grip()
+        if self.mikey_arm.arm:
+            if joystick.get_button(self.joystick_settings.light_button):
+                self.mikey_arm.toggle_light()
+            elif joystick.get_button(self.joystick_settings.open_grip):
+                arm_move = True
+                self.mikey_arm.open_grip()
+            elif joystick.get_button(self.joystick_settings.close_grip):
+                arm_move = True
+                self.mikey_arm.close_grip()
+            elif joystick.get_button(self.joystick_settings.base_acw):
+                arm_move = True
+                self.mikey_arm.base_acw()
+            elif joystick.get_button(self.joystick_settings.base_cw):
+                arm_move = True
+                self.mikey_arm.base_cw()
+            elif joystick.get_button(self.joystick_settings.shoulder_up):
+                arm_move = True
+                self.mikey_arm.shoulder_up()
+            elif joystick.get_button(self.joystick_settings.shoulder_down):
+                arm_move = True
+                self.mikey_arm.shoulder_down()
+            elif joystick.get_button(self.joystick_settings.elbow_up):
+                arm_move = True
+                self.mikey_arm.elbow_up()
+            elif joystick.get_button(self.joystick_settings.elbow_down):
+                arm_move = True
+                self.mikey_arm.elbow_down()
+            elif joystick.get_button(self.joystick_settings.wrist_up):
+                arm_move = True
+                self.mikey_arm.wrist_up()
+            elif joystick.get_button(self.joystick_settings.wrist_down):
+                arm_move = True
+                self.mikey_arm.wrist_down()
+            elif joystick.get_button(self.joystick_settings.stop_stop_please_stop):
+                self.mikey_arm.stop_arm()
+            if not arm_move:
+                self.mikey_arm.stop_arm()
 
     def get_horizontal_axis(self, joystick):
         """ Sets the self.horizontal axis """
